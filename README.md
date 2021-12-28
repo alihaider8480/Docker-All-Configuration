@@ -88,3 +88,24 @@ volumes:
     
 networks:
   pgnw:
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+                                                            prometheus.yml
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+  
+  
+rule_files:
+
+
+scrape_configs:
+  - job_name: 'AHDPAPI'
+    metrics_path: '/q/metrics'
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['192.168.20.10:8080']

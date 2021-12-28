@@ -56,3 +56,35 @@ services:
       - ./zk-single-kafka-single/kafka1/data:/var/lib/kafka/data
     depends_on:
       - zoo1
+----------------------------------------------------------------------------------------------------------------------------------
+
+                                      metrics.yml
+version: '3.5'
+
+services:
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - $HOME/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    networks:
+      - pgnw
+      
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - 3000:3000
+    networks:
+      - pgnw
+      
+volumes:
+  grafana-data:
+    driver: local
+    
+networks:
+  pgnw:

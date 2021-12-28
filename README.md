@@ -189,3 +189,24 @@ services:
     
 networks:
   elk:
+-------------------------------------------------------------------------------------------------------
+
+        
+                                            Db2 Database image run
+volumes:
+  db2data:
+
+services:
+  db:
+    image: ibmcom/db2
+    container_name: db2
+    restart: always
+    environment:
+      LICENSE: accept
+      DB2INST1_PASSWORD: db2admin
+      DBNAME: testdb
+    volumes:
+      - "db2data:/database"
+    ports:
+      - "50000:50000"
+    privileged: true

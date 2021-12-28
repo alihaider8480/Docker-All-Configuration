@@ -109,3 +109,39 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
     - targets: ['192.168.20.10:8080']
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+                                                                gitlab ki image ka lia
+services:
+
+  ide:
+    image: codercom/code-server
+    container_name: code-serverr
+    ports:
+      - 9000:8080
+    environment:
+      - "DOCKER_USER=$USER"
+    volumes:
+      - "$HOME/.config:/home/code/.config"
+      - "$PWD/workspace:/home/code/projects"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+  
+  gitlab:
+     image: "gitlab/gitlab-ce:latest"
+     restart: always
+     hostname: "www.gitlab.com"
+     ports:
+       - 8080:8080
+     volumes:
+       - "./gitlab/config:/etc/gitlab"
+       - "./gitlab/logs:/var/log/gitlab"
+       - "./gitlab/data:/var/opt/gitlab"
+      
+
+  registry:
+     image: registry
+     container_name: registryy 
+     ports: 
+       - 5003:5003 

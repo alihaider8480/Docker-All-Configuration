@@ -145,3 +145,47 @@ services:
      container_name: registryy 
      ports: 
        - 5003:5003 
+
+----------------------------------------------------------------------------------------------------------------------------
+
+                                                  elk.yml
+version: '3.5'
+
+services:
+  elasticsearch:
+    image: elasticsearch:7.16.2
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      discovery.type: single-node
+    networks:
+      - elk
+      
+  logstash:
+    image: logstash:7.16.2
+    volumes:
+      - source: $HOME/pipelines
+        target: /usr/share/logstash/pipeline
+        type: bind
+    ports:
+      - "12201:12201/udp"
+      - "5000:5000"
+      - "9600:9600"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+      
+  kibana:
+    image: kibana:7.16.2
+    ports:
+      - "5601:5601"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+    
+networks:
+  elk:
